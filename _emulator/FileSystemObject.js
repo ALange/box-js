@@ -131,7 +131,7 @@ function FileSystemObject() {
 		return value;
 	};
 	this.copyfile = function(src, dst) {
-		console.log(`Copying ${src} to ${dst}`);
+		console.log(`Executing FileSystemObject.CopyFile -> ${src} to ${dst}`);
 		return true;
 		}
 	this.getfile = (filename) => new ProxiedFile(filename);
