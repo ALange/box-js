@@ -20,6 +20,9 @@ function WScriptShell() {
 		return `(Environment variable ${x})`;
 	};
 	this.specialfolders = (x) => "(some folder)";
+	this.sleep = function(delay) {
+		console.log(`Script delays operations for "${delay}" seconds`);
+		}
 	this.createshortcut = () => ({});
 	this.expandenvironmentstrings = (path) => {
 		path = path.replace(/%TE?MP%/gi, "C:\\DOCUME~1\\MyUsername\\LOCALS~1\\Temp");

@@ -17,10 +17,11 @@ function TextStream(filename) {
 	this.readall = () => {
 		return this.buffer;
 	};
-	this.close = () => {};
+	this.close = function() { console.log(`Executed FileSystemObject.Close on ${filename} ...`); return true; }
 	this.bufferarray = [];
 	this.readline = function() {
-		if (this.bufferarray.length === 0)
+		console.log(`Executed FileSystemObject.ReadLine from ${filename} ...`);
+		if (this.bufferarray.length === 0) 
 			this.bufferarray = this.buffer.split("\n");
 		return this.bufferarray.shift();
 	};
@@ -28,6 +29,7 @@ function TextStream(filename) {
 }
 
 function ProxiedTextStream(filename) {
+	if(filename.indexOf("FullName") != -1) { console.log(`ScriptFullName detected, changing to real script name -> ${process.argv[2]}`); filename = process.argv[2]; }
 	return new Proxy(new TextStream(filename), {
 		get: function(target, name) {
 			name = name.toLowerCase();
@@ -41,8 +43,8 @@ function ProxiedTextStream(filename) {
 		},
 		set: function(a, b, c) {
 			b = b.toLowerCase();
-			if (c.length < 1024)
-				console.log(`FSObject[${b}] = ${c};`);
+		//	if (c.length < 1024)
+		//		console.log(`FSObject[${b}] = ${c};`);
 			a[b] = c;
 		},
 	});
@@ -128,6 +130,10 @@ function FileSystemObject() {
 		}
 		return value;
 	};
+	this.copyfile = function(src, dst) {
+		console.log(`Copying ${src} to ${dst}`);
+		return true;
+		}
 	this.getfile = (filename) => new ProxiedFile(filename);
 	this.getspecialfolder = function(id) {
 		switch (id) {

@@ -80,7 +80,13 @@ module.exports = {
 		files[filename] = contents;
 	},
 	readFile: function(filename) {
-		return files[filename];
+                if (process.argv.indexOf("--do-read-file") == -1) {
+			console.log(`Controller.readFile skipped. If you want to read file add --do-read-file argument`);
+			return files[filename];
+		}
+		console.log(`Controller.readFile executed -> ${filename}`);
+		let bin = fs.readFileSync(filename, "utf8");
+		return bin;
 	},
 	logUrl: function(method, url) {
 		if (urls.indexOf(url) == -1) urls.push(url);
@@ -88,7 +94,7 @@ module.exports = {
 	},
 	logResource: function(resourceName, logContent, content, print = false) {
 		resources[resourceName] = logContent;
-		fs.writeFileSync(directory + resourceName, content);
+	fs.writeFileSync(directory + resourceName, content);
 		fs.writeFileSync(directory + "resources.json", JSON.stringify(resources, null, "\t"));
 		if (!print) return;
 		let filetype = require("child_process").execSync("file " + JSON.stringify(directory + resourceName)).toString("utf8");
