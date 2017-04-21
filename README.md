@@ -55,6 +55,8 @@ It will create a folder called `file1.js.results`; if it already exists, it will
 --windows-xp (Boolean): Emulate Windows XP (influences the value of environment variables)
 
 --experimental-neq (Boolean): [experimental] rewrite `a != b` to `false`
+
+--do-read-file (Boolean): FileSystemObject.OpenTextFile.ReadLine will read the real file if this argument is present
 <!--END_FLAGS-->
 
 ## Analyzing the output
