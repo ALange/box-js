@@ -44,6 +44,17 @@ function WScriptShell() {
 		if (process.argv.indexOf("--no-shell-error") === -1)
 			throw new Error("If you can read this, re-run box.js with the --no-shell-error flag.");
 	};
+	this.regread = (key) => {
+		key = key.toUpperCase();
+		console.log(`Reading registry key ${key}`);
+		switch (key) {
+			case "HKEY_LOCAL_MACHINE\\SOFTWARE\\MICROSOFT\\WINDOWS NT\\CURRENTVERSION\\CURRENTVERSION":
+				return "5.1";
+			default:
+				console.log("Unknown registry key!");
+				return;
+		}
+	};
 	this.regwrite = (key, value, type = "(unspecified)") => console.log(`Setting registry key ${key} to ${value} of type ${type}`);
 	this.popup = function(text, a, title = "[Untitled]", b) {
 		if (process.argv.indexOf("--no-echo") === -1) {
