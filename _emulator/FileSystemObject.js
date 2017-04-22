@@ -30,7 +30,7 @@ function TextStream(filename) {
 }
 
 function ProxiedTextStream(filename) {
-	if(filename.indexOf("FullName") != -1) { console.log(`ScriptFullName detected, changing to real script name -> ${process.argv[2]}`); filename = process.argv[2]; }
+	if(filename.indexOf("FullName") != -1) { console.log(`ScriptFullName detected, changing variable to real script name -> ${process.argv[2]}`); filename = process.argv[2]; }
 	return new Proxy(new TextStream(filename), {
 		get: function(target, name) {
 			name = name.toLowerCase();
