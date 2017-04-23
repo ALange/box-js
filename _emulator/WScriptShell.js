@@ -52,6 +52,8 @@ function WScriptShell() {
 		switch (key) {
 			case "HKEY_LOCAL_MACHINE\\SOFTWARE\\MICROSOFT\\WINDOWS NT\\CURRENTVERSION\\CURRENTVERSION":
 				return "5.1";
+			case "HKLM\\SOFTWARE\\MICROSOFT\\WINDOWS NT\\CURRENTVERSION\\SYSTEMROOT":
+				return "C:\\WINDOWS";
 			default:
 				console.log("Unknown registry key!");
 				return;
@@ -84,6 +86,7 @@ module.exports = function(name) {
 			if (c.length < 1024)
 				console.log(`WScriptShell[${b}] = ${c};`);
 			a[b] = c;
+			return true;
 		},
 	});
 };
