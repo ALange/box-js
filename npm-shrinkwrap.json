@@ -29,6 +29,11 @@
       "from": "ajv-keywords@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/ajv-keywords/-/ajv-keywords-1.1.1.tgz"
     },
+    "detect-character-encoding": {
+      "version": "0.3.1",
+      "from": "detect-character-encoding@>=0.3.1",
+      "resolved": "https://registry.npmjs.org/detect-character-encoding/-/detect-character-encoding-0.3.1.tgz"
+    },
     "amdefine": {
       "version": "1.0.0",
       "from": "amdefine@>=0.0.4",
