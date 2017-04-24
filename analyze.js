@@ -20,11 +20,16 @@ const argv = commandLineArgs(flags);
 
 console.log(`Analyzing ${filename}`);
 
+// trying to detect input file character encoding
+
+var detectCharacterEncoding = require('detect-character-encoding');
+var fileBuffer = fs.readFileSync(filename);
+var charsetMatch = detectCharacterEncoding(fileBuffer);
 
 // Some malicious javascripts are using weird encoding format. Added --inputencoding=<encoding> as an option. Default is utf8
 
-const inputencoding = argv.inputencoding || "utf8";
-console.log(`Input file encoding ${inputencoding}`);
+const inputencoding = argv.inputencoding || charsetMatch.encoding;
+console.log(`Detected input file encoding ${inputencoding}`);
 
 let code = fs.readFileSync(path.join(__dirname, "patch.js"), "utf8") + fs.readFileSync(filename, inputencoding);
 
