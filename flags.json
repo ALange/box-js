@@ -83,5 +83,10 @@
         "name": "experimental-neq",
         "type": "Boolean",
         "description": "[experimental] rewrite `a != b` to `false`"
+    },
+    {
+	"name": "inputencoding",
+	"type": "String",
+	"description": "Set input file encoding. Default is utf8"
     }
 ]

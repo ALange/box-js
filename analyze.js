@@ -19,7 +19,14 @@ const flags = JSON.parse(fs.readFileSync(path.join(__dirname, "flags.json"), "ut
 const argv = commandLineArgs(flags);
 
 console.log(`Analyzing ${filename}`);
-let code = fs.readFileSync(path.join(__dirname, "patch.js"), "utf8") + fs.readFileSync(filename, "utf8");
+
+
+// Some malicious javascripts are using weird encoding format. Added --inputencoding=<encoding> as an option. Default is utf8
+
+const inputencoding = argv.inputencoding || "utf8";
+console.log(`Input file encoding ${inputencoding}`);
+
+let code = fs.readFileSync(path.join(__dirname, "patch.js"), "utf8") + fs.readFileSync(filename, inputencoding);
 
 if (code.match("<job") || code.match("<script")) { // The sample may actually be a .wsf, which is <job><script>..</script><script>..</script></job>.
 	code = code.replace(/<\??\/?\w+( .*)*\??>/g, ""); // XML tags
