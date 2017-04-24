@@ -19,7 +19,7 @@ function WScriptShell() {
 			};
 		return `(Environment variable ${x})`;
 	};
-	this.specialfolders = (x) => "(some folder)";
+	this.specialfolders = (x) => `(Special folder ${x})`;
 	this.sleep = function(delay) {
 		console.log(`Script delays operations for "${delay}" seconds`);
 		}
