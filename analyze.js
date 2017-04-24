@@ -2,6 +2,7 @@ const controller = require("./_controller");
 const escodegen = require("escodegen");
 const esprima = require("esprima");
 const fs = require("fs");
+const iconv = require("iconv-lite");
 const path = require("path");
 const {VM} = require("vm2");
 
@@ -19,20 +20,13 @@ const flags = JSON.parse(fs.readFileSync(path.join(__dirname, "flags.json"), "ut
 const argv = commandLineArgs(flags);
 
 console.log(`Analyzing ${filename}`);
+const sample_buffer = fs.readFileSync(filename);
+const encoding = require("jschardet").detect(sample_buffer).encoding;
+console.log(`The file seems to be encoded with ${encoding}.`);
+const sample_source = iconv.decode(sample_buffer, encoding);
+let code = fs.readFileSync(path.join(__dirname, "patch.js"), "utf8") + sample_source;
 
-// trying to detect input file character encoding
-
-var detectCharacterEncoding = require('detect-character-encoding');
-var fileBuffer = fs.readFileSync(filename);
-var charsetMatch = detectCharacterEncoding(fileBuffer);
-
-// Some malicious javascripts are using weird encoding format. Added --inputencoding=<encoding> as an option. Default is utf8
-
-const inputencoding = argv.inputencoding || charsetMatch.encoding;
 console.log(`Detected input file encoding ${inputencoding}`);
-
-let code = fs.readFileSync(path.join(__dirname, "patch.js"), "utf8") + fs.readFileSync(filename, inputencoding);
-
 if (code.match("<job") || code.match("<script")) { // The sample may actually be a .wsf, which is <job><script>..</script><script>..</script></job>.
 	code = code.replace(/<\??\/?\w+( .*)*\??>/g, ""); // XML tags
 	code = code.replace(/<!\[CDATA\[/g, "");
@@ -190,23 +184,23 @@ const sandbox = {
 		log: (x) => console.log(JSON.stringify(x)),
 	},
 	Enumerator: require("./_emulator/Enumerator"),
-	GetObject: str => {
+	GetObject: (str) => {
 		str = str.toLowerCase();
 		switch (str) {
 			case "winmgmts:{impersonationlevel=impersonate}":
 				return {
-					InstancesOf: table => {
+					InstancesOf: (table) => {
 						table = table.toLowerCase();
 						switch (table) {
 							case "win32_computersystemproduct":
 								return [{
-									Name: "Foobar"
+									Name: "Foobar",
 								}];
 							default:
 								controller.kill(`WMI.InstancesOf(${table}) not implemented!`);
 						}
-					}
-				}
+					},
+				};
 			case "winmgmts:":
 				return {
 					InstancesOf: table => {
