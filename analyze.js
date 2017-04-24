@@ -207,6 +207,53 @@ const sandbox = {
 						}
 					}
 				}
+			case "winmgmts:":
+				return {
+					InstancesOf: table => {
+						table = table.toLowerCase();
+						switch (table) {
+							case "win32_operatingsystem":
+								return [{
+									Caption: "Microsoft Windows 10 Pro"
+								}];
+							case "win32_logicaldisk":
+								return [{
+									// dirty patch for now
+									VolumeSerialNumber: "B55B4A40"
+								}];
+							default:
+								controller.kill(`WMI.InstancesOf(${table}) not implemented`);
+						}
+				}
+			}
+			case "winmgmts:\\\\localhost\\root\\securitycenter":
+				return {
+					InstancesOf: table => {
+						table = table.toLowerCase();
+						switch (table) {
+							case "antivirusproduct":
+								return [{
+									DisplayName: "Windows Defender"
+								}];
+							default:
+								controller.kill(`WMI.InstancesOf(${table}) not implemented`);
+						}
+				}
+			}
+			case "winmgmts:\\\\localhost\\root\\securitycenter2":
+                                return {
+                                        InstancesOf: table => {
+                                                table = table.toLowerCase();
+                                                switch (table) {
+                                                        case "antivirusproduct":
+                                                                return [{
+                                                                        DisplayName: "Windows Defender"
+                                                                }];
+                                                        default:
+                                                                controller.kill(`WMI.InstancesOf(${table}) not implemented`);
+                                                }
+                                }
+                        }
 			default:
 				controller.kill(`GetObject(${str}) not implemented!`);
 		}
@@ -326,6 +373,8 @@ function ActiveXObject(name) {
 	console.log(`New ActiveXObject: ${name}`);
 	name = name.toLowerCase();
 	if (name.match("winhttprequest"))
+		return require("./_emulator/XMLHTTP")();
+	if (name.match("xmlhttp")) 
 		return require("./_emulator/XMLHTTP")();
 	if (name.match("dom")) {
 		return {
