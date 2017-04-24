@@ -52,6 +52,7 @@ function ProxiedTextStream(filename) {
 	});
 }
 
+
 function Folder(path, autospawned) {
 	this.attributes = 16;
 	this.datelastmodified = new Date(new Date() - 15 * 60 * 1000); // Last changed: 15 minutes ago
@@ -112,6 +113,8 @@ function ProxiedDrive(name) {
 		get: function(target, name) {
 			name = name.toLowerCase();
 			switch (name) {
+				case "path":
+					console.log(`Requested ${path} access`);
 				default:
 					if (!(name in target)) {
 						controller.kill(`FileSystemObject.Drive.${name} not implemented!`);
