@@ -26,18 +26,20 @@ function WScriptShell() {
 	this.createshortcut = () => ({});
 	this.expandenvironmentstrings = (path) => {
 		console.log(`WScript.Shell -> ExpandEnviromentStrings -> ${path}`);
-		path = path.replace(/%TE?MP%/gi, "C:\\DOCUME~1\\MyUsername\\LOCALS~1\\Temp");
+		path = path.replace(/%TE?MP%/gi, "C:\\DOCUME~1\\User\\LOCALS~1\\Temp");
 		path = path.replace(/%PROCESSOR_REVISION%/gi, "0209");
-		path = path.replace(/%USERPROFILE%/gi, "C:\\Users\\MyUsername");
+		path = path.replace(/%USERPROFILE%/gi, "C:\\Users\\User");
+		path = path.replace(/%PROGRAMDATA%/gi, "C:\\ProgramData");
+		path = path.replace(/%WINDIR%/gi, "C:\\WINDOWS");
 		path = path.replace(/%COMPUTERNAME%/gi, "MYPC");
 		path = path.replace(/%USERNAME%/gi, "PC User");		
 
 		// %APPDATA% equals C:\Documents and Settings\{username}\Application Data on Windows XP,
 		// but C:\Users\{username}\AppData\Roaming on Win Vista and above
 		if (process.argv.indexOf("--windows-xp") === -1)
-			path = path.replace(/%APPDATA%/gi, "C:\\Documents and Settings\\MyUsername\\Application Data");
+			path = path.replace(/%APPDATA%/gi, "C:\\Documents and Settings\\User\\Application Data");
 		else
-			path = path.replace(/%APPDATA%/gi, "C:\\Users\\MyUsername\\AppData\\Roaming");
+			path = path.replace(/%APPDATA%/gi, "C:\\Users\\User\\AppData\\Roaming");
 		return path;
 	};
 	this.exec = this.run = function(...args) {
